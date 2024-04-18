@@ -41,8 +41,11 @@ internal class FetchStatsCommand : AuthenticatedRouteCommand
         else
         {
             // parse data to json (string) and create repsonse with code 200
-            string json = JsonConvert.SerializeObject(data);
-            response = new HttpResponse(StatusCode.Ok, json);
+            string message = "";
+            message += "NAME: " + data.Name + ", ELO: " + data.Elo + ", PUSHUPS: " + data.Pushups +
+                       " , AVERAGE PUSHUPS: " + data.AveragePushups + "\n";
+            
+            response = new HttpResponse(StatusCode.Ok, message);
         }
 
         return response;

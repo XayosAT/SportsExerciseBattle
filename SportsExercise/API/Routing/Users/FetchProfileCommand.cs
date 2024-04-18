@@ -15,7 +15,7 @@ internal class FetchProfileCommand : AuthenticatedRouteCommand
 
     public FetchProfileCommand(IUserManager userManager, User identity, string username) : base(identity)
     {
-        Console.WriteLine("FetchProfileCommand Constructor");
+        
         _userManager = userManager;
         _username = username;
     }
@@ -50,8 +50,9 @@ internal class FetchProfileCommand : AuthenticatedRouteCommand
         else
         {
             // parse data to json (string) and create repsonse with code 200
-            string json = JsonConvert.SerializeObject(data);
-            response = new HttpResponse(StatusCode.Ok, json);
+            string message = "";
+            message += "NAME: " + data.Name + ", BIO: " + data.Bio + ", IMAGE: " + data.Image + "\n";
+            response = new HttpResponse(StatusCode.Ok, message);
         }
         
         return response;
