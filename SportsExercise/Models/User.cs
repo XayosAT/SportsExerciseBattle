@@ -1,6 +1,6 @@
 namespace SportsExercise.Models
 {
-    internal class User
+    public class User
     {
         public string Username { get; private set; }
         public string Password { get; private set; }

@@ -16,7 +16,7 @@ IScoreboardDao scoreboardDao = new DatabaseScoreboardDao(connectionString);
 IUserManager userManager = new UserManager(userDao);
 IScoreboardManager scoreboardManager = new ScoreboardManager(scoreboardDao);
 
-var tournamentManager = TournamentManager.GetInstance();
+var tournamentManager = TournamentManager.GetInstance(userManager);
 var router = new MessageRouter(userManager, scoreboardManager, tournamentManager);
 var server = new HttpServer(router, IPAddress.Any,10001);
 server.Start();

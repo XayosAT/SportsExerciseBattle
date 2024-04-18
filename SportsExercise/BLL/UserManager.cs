@@ -63,5 +63,16 @@ namespace SportsExercise.BLL
             Console.WriteLine("\n Fetching records for " + username);
             return _userDao.FetchRecords(username);
         }
+
+        public void InsertEntry(string username, Entry entry)
+        {
+            Console.WriteLine("\n Inserting entry for " + username);
+            _userDao.InsertEntry(username, entry);
+        }
+        public void UpdateElo(string username, int elo)
+        {
+            Console.WriteLine("\n Updating elo for " + username);
+            _userDao.UpdateElo(username, elo);
+        }
     }
 }

@@ -14,7 +14,7 @@ internal class FetchStatsCommand : AuthenticatedRouteCommand
 
     public FetchStatsCommand(IUserManager userManager, User identity) : base(identity)
     {
-        Console.WriteLine("FetchProfileCommand Constructor");
+        
         _userManager = userManager;
         
     }
@@ -25,6 +25,7 @@ internal class FetchStatsCommand : AuthenticatedRouteCommand
 
         try
         {
+            Console.WriteLine("Identity: " + Identity.Username);
             data = _userManager.FetchStats(Identity.Username);
         }
         catch (UserNotFoundException)

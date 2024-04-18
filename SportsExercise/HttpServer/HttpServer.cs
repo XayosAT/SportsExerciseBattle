@@ -59,9 +59,9 @@ namespace SportsExercise.HttpServer
                     
                     try
                     {
-                        Console.WriteLine("Resolving request...");
+                        //Console.WriteLine("Resolving request...");
                         var command = _router.Resolve(request);
-                        Console.WriteLine("Command resolved");
+                        //Console.WriteLine("Command resolved");
                         
                         if (command is null)
                         {

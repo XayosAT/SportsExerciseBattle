@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SportsExercise.BLL
 {
-    internal interface IUserManager
+    public interface IUserManager
     {
         User LoginUser(Credentials credentials);
         void RegisterUser(Credentials credentials);
@@ -16,5 +16,7 @@ namespace SportsExercise.BLL
         void UpdateProfile(string username, Profile profile);
         Stats? FetchStats(string username);
         Record[]? FetchRecords(string username);
+        void InsertEntry(string username, Entry entry);
+        void UpdateElo(string username, int elo);
     }
 }

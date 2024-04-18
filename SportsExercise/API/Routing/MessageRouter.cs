@@ -37,15 +37,15 @@ namespace SportsExercise.API.Routing
 
         public IRouteCommand? Resolve(HttpRequest request)
         {
-            Console.WriteLine("In Resolve");
+            //Console.WriteLine("In Resolve");
             var checkBody = (string? payload) => payload ?? throw new InvalidDataException();
 
             try
             {
-                Console.WriteLine("Resolving request...try");
-                //print the recourse path
-                Console.WriteLine(request.ResourcePath);
-                Console.WriteLine(request.ResourcePath.StartsWith("/users/"));
+                //Console.WriteLine("Resolving request...try");
+                
+                //Console.WriteLine(request.ResourcePath);
+               
                 return request switch
                 {
                     
@@ -59,7 +59,7 @@ namespace SportsExercise.API.Routing
                     {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/score") => new FetchScoreboardCommand(_scoreboardManager, GetIdentity(request)),
 
                     {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/history") => new FetchHistoryCommand(_userManager, GetIdentity(request)),
-                    //{Method: HttpMethod.Put, ResourcePath: var path} when path.StartsWith("/tournament") => new TakePartInTournamentCommand(_tournamentManager, GetIdentity(request), checkBody(request.Payload)),
+                    {Method: HttpMethod.Post, ResourcePath: var path} when path.StartsWith("/history") => new TakePartInTournamentCommand(_tournamentManager, _userManager, GetIdentity(request), checkBody(request.Payload)),
                     {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/tournament") => new GetTournamentInfoCommand(_tournamentManager, GetIdentity(request)),
                     _ => null
                 };

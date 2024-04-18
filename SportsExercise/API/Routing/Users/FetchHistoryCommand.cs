@@ -39,8 +39,13 @@ internal class FetchHistoryCommand : AuthenticatedRouteCommand
         else
         {
             // parse data to json (string) and create repsonse with code 200
-            string json = JsonConvert.SerializeObject(data);
-            response = new HttpResponse(StatusCode.Ok, json);
+            string message = "";
+            foreach (Record r in data)
+            {
+                message += "COUNT: " + r.Count + ", DURATION: " + r.Duration + ", DATE: " + r.Date + "\n";
+            }
+            
+            response = new HttpResponse(StatusCode.Ok, message);
         }
 
         return response;

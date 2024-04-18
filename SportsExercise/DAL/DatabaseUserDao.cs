@@ -16,17 +16,11 @@ namespace SportsExercise.DAL
         private const string InsertUserCommand = @"INSERT INTO users(username, password) VALUES (@username, @password)";
         private const string FetchProfileCommand = @"SELECT name, bio, image FROM users WHERE username = @username";
         private const string UpdateProfileCommand = @"UPDATE users SET name = @name, bio = @bio, image = @image WHERE username = @username";
-        private const string FetchStatsCommand = @"
-    SELECT
-        u.username,
-        COALESCE(SUM(p.count), 0) AS total_pushups,
-        u.elo
-    FROM
-        users u
-    LEFT JOIN
-        push_up_records p ON u.username = p.fk_user_id
-    GROUP BY
-        u.username, u.elo";
+        // Assuming FetchStatsCommand is defined somewhere else and correctly includes a placeholder for @username
+        private const string FetchStatsCommand = "SELECT username, elo, COALESCE(SUM(push_up_records.count), 0) AS total_pushups FROM users LEFT JOIN push_up_records ON users.username = push_up_records.fk_user_id WHERE username = @username GROUP BY username, elo;";
+
+        
+        
         private const string FetchRecordsCommand = @"
         SELECT
             count,
@@ -38,7 +32,10 @@ namespace SportsExercise.DAL
             fk_user_id = @username
         ORDER BY
             date_time DESC";
-        
+
+        private const string InsertEntryCommand = @"INSERT INTO push_up_records(fk_user_id, count, duration) VALUES (@username, @count, @duration)";
+        //create Update elo commmand, it should add the value
+        private const string UpdateEloCommand = @"UPDATE users SET elo = elo + @elo WHERE username = @username";
         private readonly string _connectionString;
 
         public DatabaseUserDao(string connectionString)
@@ -192,6 +189,7 @@ namespace SportsExercise.DAL
             Stats? stats = null;
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
+            Console.WriteLine("Username in Database: " + username);
             
             try
             {
@@ -201,10 +199,15 @@ namespace SportsExercise.DAL
                 using var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
+                    Console.WriteLine("Username in Database: " + Convert.ToString(reader["username"]));
+                    Console.WriteLine("Elo in Database: " + Convert.ToInt32(reader["elo"]));
+                    Console.WriteLine("Total Pushups in Database: " + Convert.ToInt32(reader["total_pushups"]));
+                    
                     stats = new Stats(
                         Convert.ToString(reader["username"]),
                         Convert.ToInt32(reader["elo"]),
                         Convert.ToInt32(reader["total_pushups"])
+                        
                         
                     );
                 }
@@ -246,6 +249,42 @@ namespace SportsExercise.DAL
             {
                 Console.WriteLine("Exception in FetchRecords: " + e.Message);
                 return null;
+            }
+        }
+        
+        public void InsertEntry(string username, Entry entry)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            try
+            {
+                using var cmd = new NpgsqlCommand(InsertEntryCommand, connection);
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("count", entry.Count);
+                cmd.Parameters.AddWithValue("duration", entry.DurationInSeconds);
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException e)
+            {
+                Console.WriteLine("Exception in InsertEntry: " + e.Message);
+            }
+        }
+        public void UpdateElo(string username, int elo)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            try
+            {
+                using var cmd = new NpgsqlCommand(UpdateEloCommand, connection);
+                cmd.Parameters.AddWithValue("username", username);
+                cmd.Parameters.AddWithValue("elo", elo);
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException e)
+            {
+                Console.WriteLine("Exception in UpdateElo: " + e.Message);
             }
         }
     }

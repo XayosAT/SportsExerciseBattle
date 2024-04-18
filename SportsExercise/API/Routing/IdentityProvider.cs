@@ -24,18 +24,18 @@ namespace SportsExercise.API.Routing
 
             if (request.Header.TryGetValue("Authorization", out var authToken))
             {
-                Console.WriteLine("authToken: " + authToken);
+                //Console.WriteLine("authToken: " + authToken);
                 const string prefix = "Basic ";
                 if (authToken.StartsWith(prefix))
                 {
                     try
                     {
-                        Console.WriteLine("authToken.Substring(prefix.Length): " + authToken.Substring(prefix.Length));
+                        //Console.WriteLine("authToken.Substring(prefix.Length): " + authToken.Substring(prefix.Length));
                         currentUser = _userManager.GetUserByAuthToken(authToken.Substring(prefix.Length));
                     }
                     catch(UserNotFoundException ex) 
                     { 
-                        Console.WriteLine("UserNotFoundException: " + ex);
+                        //Console.WriteLine("UserNotFoundException: " + ex);
                     }
                 }
             }

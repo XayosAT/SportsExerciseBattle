@@ -7,11 +7,14 @@ public class Stats
     
     public string? Name { get; set; }
     
-    public Stats( string? name, int? elo, int? pushups)
+    public double? AveragePushups { get; set; }
+    
+    public Stats( string? name, int? elo, int? pushups, double? averagePushups)
     {
         Name = name;
         Elo = elo;
         Pushups = pushups;
-        
+        AveragePushups = averagePushups;
     }
+  
 }

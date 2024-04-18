@@ -13,20 +13,24 @@ internal class FetchScoreboardCommand : AuthenticatedRouteCommand
     
     public FetchScoreboardCommand(IScoreboardManager scoreboardManager, User identity) : base(identity)
     {
-        Console.WriteLine("FetchScoreboardCommand Constructor");
+       
         _scoreboardManager = scoreboardManager;
         
     }
     
     public override HttpResponse Execute()
     {
-        Console.WriteLine("FetchScoreboardCommand Execute+++++++++++++");
+       
         Stats[] data = _scoreboardManager.GetScoreboard();
         
         // parse data to json (string) and create repsonse with code 200
-        string json = JsonConvert.SerializeObject(data);
-        Console.WriteLine(json);
-        HttpResponse response = new HttpResponse(StatusCode.Ok, json);
+        string message = "";
+        foreach (Stats s in data)
+        {
+            message += "USER: " + s.Name + ", PUSH-UPS: " + s.Pushups + ", ELO: " + s.Elo + "\n";
+        }
+        
+        HttpResponse response = new HttpResponse(StatusCode.Ok, message);
         
         return response;
     }
