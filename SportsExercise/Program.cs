@@ -11,9 +11,12 @@ using SportsExercise;
 var connectionString = "Host=localhost;Username=postgres;Password=postgres;Database=SEB";
 
 IUserDao userDao = new DatabaseUserDao(connectionString);
+IScoreboardDao scoreboardDao = new DatabaseScoreboardDao(connectionString);
+
 IUserManager userManager = new UserManager(userDao);
+IScoreboardManager scoreboardManager = new ScoreboardManager(scoreboardDao);
 
-
-var router = new MessageRouter(userManager);
+var tournamentManager = TournamentManager.GetInstance();
+var router = new MessageRouter(userManager, scoreboardManager, tournamentManager);
 var server = new HttpServer(router, IPAddress.Any,10001);
 server.Start();

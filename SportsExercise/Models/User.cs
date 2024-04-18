@@ -4,7 +4,7 @@ namespace SportsExercise.Models
     {
         public string Username { get; private set; }
         public string Password { get; private set; }
-        public string Token => $"{Username}-msgToken";
+        public string Token => $"{Username}-sebToken";
 
         public User(string username, string password)
         {

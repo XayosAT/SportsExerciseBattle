@@ -14,8 +14,30 @@ namespace SportsExercise.DAL
         private const string SelectAllUsersCommand = @"SELECT username, password FROM users";
         private const string SelectUserByCredentialsCommand = "SELECT username, password FROM users WHERE username=@username AND password=@password";
         private const string InsertUserCommand = @"INSERT INTO users(username, password) VALUES (@username, @password)";
-        private const string FetchProfileCommand = "SELECT name, bio, image FROM users WHERE username = @username";
-        private const string UpdateProfileCommand = "UPDATE users SET name = @name, bio = @bio, image = @image WHERE username = @username";
+        private const string FetchProfileCommand = @"SELECT name, bio, image FROM users WHERE username = @username";
+        private const string UpdateProfileCommand = @"UPDATE users SET name = @name, bio = @bio, image = @image WHERE username = @username";
+        private const string FetchStatsCommand = @"
+    SELECT
+        u.username,
+        COALESCE(SUM(p.count), 0) AS total_pushups,
+        u.elo
+    FROM
+        users u
+    LEFT JOIN
+        push_up_records p ON u.username = p.fk_user_id
+    GROUP BY
+        u.username, u.elo";
+        private const string FetchRecordsCommand = @"
+        SELECT
+            count,
+            duration,
+            date_time
+        FROM
+            push_up_records
+        WHERE
+            fk_user_id = @username
+        ORDER BY
+            date_time DESC";
         
         private readonly string _connectionString;
 
@@ -27,6 +49,7 @@ namespace SportsExercise.DAL
 
         public User? GetUserByAuthToken(string authToken)
         {
+            Console.WriteLine("In GetUserByAuthToken");
             return GetAllUsers().SingleOrDefault(u => u.Token == authToken);
         }
 
@@ -162,6 +185,68 @@ namespace SportsExercise.DAL
                 return false;
             }
 
+        }
+
+        public Stats? FetchStats(string username)
+        {
+            Stats? stats = null;
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            
+            try
+            {
+                using var cmd = new NpgsqlCommand(FetchStatsCommand, connection);
+                cmd.Parameters.AddWithValue("username", username);
+                
+                using var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    stats = new Stats(
+                        Convert.ToString(reader["username"]),
+                        Convert.ToInt32(reader["elo"]),
+                        Convert.ToInt32(reader["total_pushups"])
+                        
+                    );
+                }
+                return stats;
+            }
+            catch (NpgsqlException e)
+            {
+                Console.WriteLine("Exception in FetchStats: " + e.Message);
+                return null;
+            }
+            
+        }
+
+        public Record[]? FetchRecords(string username)
+        {
+            List<Record> history = new List<Record>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            try
+            {
+                using var cmd = new NpgsqlCommand(FetchRecordsCommand, connection);
+                cmd.Parameters.AddWithValue("username", username);
+
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Record record = new Record(
+                        Convert.ToInt32(reader["count"]),
+                        Convert.ToInt32(reader["duration"]),
+                        Convert.ToDateTime(reader["date_time"])
+                    );
+                    history.Add(record);
+                }
+
+                return history.ToArray();
+            }
+            catch (NpgsqlException e)
+            {
+                Console.WriteLine("Exception in FetchRecords: " + e.Message);
+                return null;
+            }
         }
     }
 }

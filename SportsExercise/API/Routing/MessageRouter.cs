@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SportsExercise.API.Routing.Users;
+using SportsExercise.API.Routing.Tournament;
 using SportsExercise.BLL;
 using SportsExercise.HttpServer;
 using SportsExercise.HttpServer.Request;
@@ -17,15 +18,21 @@ namespace SportsExercise.API.Routing
     internal class MessageRouter : IRouter
     {
         private readonly IUserManager _userManager;
+        private readonly IScoreboardManager _scoreboardManager;
         
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
+        
+        private readonly TournamentManager _tournamentManager;
 
-        public MessageRouter(IUserManager userManager)
+        public MessageRouter(IUserManager userManager, IScoreboardManager scoreboardManager, TournamentManager tournamentManager)
         {
             _userManager = userManager;
             _identityProvider = new IdentityProvider(userManager);
             _routeParser = new IdRouteParser();
+            _scoreboardManager = scoreboardManager;
+            _tournamentManager = tournamentManager;
+            
         }
 
         public IRouteCommand? Resolve(HttpRequest request)
@@ -36,6 +43,9 @@ namespace SportsExercise.API.Routing
             try
             {
                 Console.WriteLine("Resolving request...try");
+                //print the recourse path
+                Console.WriteLine(request.ResourcePath);
+                Console.WriteLine(request.ResourcePath.StartsWith("/users/"));
                 return request switch
                 {
                     
@@ -45,6 +55,12 @@ namespace SportsExercise.API.Routing
                     { Method: HttpMethod.Get, ResourcePath: var path } when path.StartsWith("/users/") => new FetchProfileCommand(_userManager, GetIdentity(request), ExtractUsername(path)),
                     { Method: HttpMethod.Put, ResourcePath: var path } when path.StartsWith("/users/") => new UpdateProfileCommand(_userManager, GetIdentity(request), ExtractUsername(path), checkBody(request.Payload)),
                     
+                    {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/stats") => new FetchStatsCommand(_userManager, GetIdentity(request)),
+                    {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/score") => new FetchScoreboardCommand(_scoreboardManager, GetIdentity(request)),
+
+                    {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/history") => new FetchHistoryCommand(_userManager, GetIdentity(request)),
+                    //{Method: HttpMethod.Put, ResourcePath: var path} when path.StartsWith("/tournament") => new TakePartInTournamentCommand(_tournamentManager, GetIdentity(request), checkBody(request.Payload)),
+                    {Method: HttpMethod.Get, ResourcePath: var path} when path.StartsWith("/tournament") => new GetTournamentInfoCommand(_tournamentManager, GetIdentity(request)),
                     _ => null
                 };
             }
@@ -62,11 +78,13 @@ namespace SportsExercise.API.Routing
 
         private User GetIdentity(HttpRequest request)
         {
+            Console.WriteLine("Getting identity...");
             return _identityProvider.GetIdentityForRequest(request) ?? throw new RouteNotAuthenticatedException();
         }
         
         private string ExtractUsername(string path)
         {
+            Console.WriteLine("Extracting username...");
             string username = path.Split("/").Last();
             Console.WriteLine("Extracted username: " + username);
             return username;

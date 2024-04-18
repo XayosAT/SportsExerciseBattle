@@ -40,6 +40,7 @@ namespace SportsExercise.BLL
 
         public Profile? FetchProfile(string username)
         {
+            Console.WriteLine("\n Fetching profile for " + username);
             return _userDao.FetchProfile(username);
         }
         
@@ -49,6 +50,18 @@ namespace SportsExercise.BLL
             {
                 throw new UserNotFoundException("User not found");
             }
+        }
+
+        public Stats? FetchStats(string username)
+        {
+            Console.WriteLine("\n Fetching stats for " + username);
+            return _userDao.FetchStats(username);
+        }
+        
+        public Record[]? FetchRecords(string username)
+        {
+            Console.WriteLine("\n Fetching records for " + username);
+            return _userDao.FetchRecords(username);
         }
     }
 }

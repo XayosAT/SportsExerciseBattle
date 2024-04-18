@@ -14,5 +14,7 @@ namespace SportsExercise.DAL
         bool InsertUser(User user);
         Profile? FetchProfile(string username);
         bool UpdateProfile(string username, Profile profile);
+        Stats? FetchStats(string username);
+        Record[]? FetchRecords(string username);
     }
 }

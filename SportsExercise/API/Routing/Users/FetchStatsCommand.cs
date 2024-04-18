@@ -5,43 +5,33 @@ using SportsExercise.Models;
 using System;
 using Newtonsoft.Json;
 
-
 namespace SportsExercise.API.Routing.Users;
 
-internal class FetchProfileCommand : AuthenticatedRouteCommand
+internal class FetchStatsCommand : AuthenticatedRouteCommand
 {
     private readonly IUserManager _userManager;
-    private readonly string _username;
+    
 
-    public FetchProfileCommand(IUserManager userManager, User identity, string username) : base(identity)
+    public FetchStatsCommand(IUserManager userManager, User identity) : base(identity)
     {
         Console.WriteLine("FetchProfileCommand Constructor");
         _userManager = userManager;
-        _username = username;
+        
     }
-    
+
     public override HttpResponse Execute()
     {
-        Profile? data;
+        Stats? data;
 
-        //Console.WriteLine("______________");
-        //Console.WriteLine(Identity.Username);
-        //Console.WriteLine(_username);
-        
-        if(Identity.Username != _username)
+        try
         {
-            return new HttpResponse(StatusCode.Unauthorized, "Usernames do not match");
-        }
-        
-        
-        try 
-        {
-            data = _userManager.FetchProfile(_username);
+            data = _userManager.FetchStats(Identity.Username);
         }
         catch (UserNotFoundException)
         {
             data = null;
         }
+
         HttpResponse response;
         if (data == null)
         {
@@ -53,10 +43,9 @@ internal class FetchProfileCommand : AuthenticatedRouteCommand
             string json = JsonConvert.SerializeObject(data);
             response = new HttpResponse(StatusCode.Ok, json);
         }
-        
-        return response;
 
-        
+        return response;
     }
-    
+
+
 }

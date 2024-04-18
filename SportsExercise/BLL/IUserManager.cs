@@ -14,5 +14,7 @@ namespace SportsExercise.BLL
         User GetUserByAuthToken(string authToken);
         Profile? FetchProfile(string username);
         void UpdateProfile(string username, Profile profile);
+        Stats? FetchStats(string username);
+        Record[]? FetchRecords(string username);
     }
 }

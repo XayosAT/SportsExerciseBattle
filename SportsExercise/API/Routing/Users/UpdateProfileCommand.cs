@@ -13,10 +13,10 @@ internal class UpdateProfileCommand : AuthenticatedRouteCommand
     private readonly string _username;
     private readonly string _profile;
 
-    public UpdateProfileCommand(IUserManager userManager, User identity, string token, string profile) : base(identity)
+    public UpdateProfileCommand(IUserManager userManager, User identity, string username, string profile) : base(identity)
     {
         _userManager = userManager;
-        _username = identity.Username;
+        _username = username;
         _profile = profile;
     }
     

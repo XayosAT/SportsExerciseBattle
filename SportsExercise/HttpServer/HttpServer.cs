@@ -84,7 +84,7 @@ namespace SportsExercise.HttpServer
             }
             finally
             {
-                Console.WriteLine("Closing client...");
+                Console.WriteLine("Closing client...\n");
                 client.Close();
             }
             
