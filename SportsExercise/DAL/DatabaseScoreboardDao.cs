@@ -50,7 +50,8 @@ internal class DatabaseScoreboardDao : IScoreboardDao
                 Stats stats = new Stats(
                     Convert.ToString(reader["username"]),
                     Convert.ToInt32(reader["elo"]),
-                    Convert.ToInt32(reader["total_pushups"])
+                    Convert.ToInt32(reader["total_pushups"]),
+                    0
                 );
                 scoreboard.Add(stats);
             }

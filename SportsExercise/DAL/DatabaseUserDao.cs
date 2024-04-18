@@ -17,8 +17,25 @@ namespace SportsExercise.DAL
         private const string FetchProfileCommand = @"SELECT name, bio, image FROM users WHERE username = @username";
         private const string UpdateProfileCommand = @"UPDATE users SET name = @name, bio = @bio, image = @image WHERE username = @username";
         // Assuming FetchStatsCommand is defined somewhere else and correctly includes a placeholder for @username
-        private const string FetchStatsCommand = "SELECT username, elo, COALESCE(SUM(push_up_records.count), 0) AS total_pushups FROM users LEFT JOIN push_up_records ON users.username = push_up_records.fk_user_id WHERE username = @username GROUP BY username, elo;";
-
+        private const string FetchStatsCommand = @"
+    SELECT
+        u.username,
+        u.elo,
+        COALESCE(SUM(p.count), 0) AS total_pushups,
+        CASE 
+            WHEN COALESCE(SUM(p.duration), 0) > 0 THEN 
+                CAST(COALESCE(SUM(p.count), 0) AS FLOAT) / COALESCE(SUM(p.duration), 0)
+            ELSE 0
+        END AS average_pushups
+    FROM
+        users u
+    LEFT JOIN
+        push_up_records p ON u.username = p.fk_user_id
+    WHERE
+        u.username = @username
+    GROUP BY
+        u.username, u.elo;
+";
         
         
         private const string FetchRecordsCommand = @"
@@ -206,7 +223,8 @@ namespace SportsExercise.DAL
                     stats = new Stats(
                         Convert.ToString(reader["username"]),
                         Convert.ToInt32(reader["elo"]),
-                        Convert.ToInt32(reader["total_pushups"])
+                        Convert.ToInt32(reader["total_pushups"]),
+                        Convert.ToDouble(reader["average_pushups"])
                         
                         
                     );

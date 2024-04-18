@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "FuEZUIjD/eU7BDLontbD3knY2HVU6LHIeKtkmKAMehDihesJRWTWt5HlwW8XsTRrpSJlvjyez/e1a0NIVyjU5Q==",
+  "dgSpecHash": "TsKu5VGQM4bJmw0OK6LQVQIdTmAW16XqrUfiX9kVXOnjH1seyeantQWecd5pJkkopHJ6uArGCfyPl6wEDmi8Jg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Christoph\\RiderProjects\\SportsExerciseBattle\\SportsExercise\\SportsExercise.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Christoph\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Christoph\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\Christoph\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
-    "C:\\Users\\Christoph\\.nuget\\packages\\npgsql\\8.0.2\\npgsql.8.0.2.nupkg.sha512"
+    "C:\\Users\\Christoph\\.nuget\\packages\\npgsql\\8.0.2\\npgsql.8.0.2.nupkg.sha512",
+    "C:\\Users\\Christoph\\.nuget\\packages\\nunit\\4.1.0\\nunit.4.1.0.nupkg.sha512"
   ],
   "logs": []
 }
