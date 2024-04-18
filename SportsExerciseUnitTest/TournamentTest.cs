@@ -9,7 +9,7 @@ namespace SportsExerciseUnitTest;
 public class TournamentTest
 {
     private Mock<IUserManager> _userManagerMock;
-    private TournamentManager _tournamentManager;
+    private TournamentManager? _tournamentManager;
 
     [SetUp]
     public void Setup()
@@ -81,6 +81,7 @@ public class TournamentTest
         Assert.That(response, Is.EqualTo("Entry added successfully"));
     }
     
+    //Test that the AddEntry method adds multiple entries to the user pushups
     [Test]
     public void AddEntry_TournamentActive_AddsEntryToUserPushUps_WhenMultipleUsers()
     {
@@ -91,6 +92,7 @@ public class TournamentTest
         Assert.That(_tournamentManager.GetPushUps("username3"), Is.EqualTo(20));
     }
     
+    //Test that count is added to the user pushups when the AddEntry method is called multiple times for the same user
     [Test]
     public void AddEntry_TournamentActive_AddsEntryToUserPushUps_WhenConsecutiveEntries()
     {
@@ -110,7 +112,8 @@ public class TournamentTest
         Assert.That(_tournamentManager.GetPushUps("no_user"), Is.EqualTo(-1));
     }
     
-    //Test that the Tournament is inactive after 21 seconds
+    //Test that the Tournament is inactive after 20 seconds,
+    // IMPORTANT: This test will fail if the timer is set to 2 minutes, should be adjusted if the timer is changed
     [Test]
     public void EndTournament_TournamentActive_After21Seconds()
     {

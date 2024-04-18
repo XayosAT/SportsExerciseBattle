@@ -23,9 +23,9 @@ namespace SportsExercise.API.Routing
         private readonly IdentityProvider _identityProvider;
         private readonly IdRouteParser _routeParser;
         
-        private readonly TournamentManager _tournamentManager;
+        private readonly TournamentManager? _tournamentManager;
 
-        public MessageRouter(IUserManager userManager, IScoreboardManager scoreboardManager, TournamentManager tournamentManager)
+        public MessageRouter(IUserManager userManager, IScoreboardManager scoreboardManager, TournamentManager? tournamentManager)
         {
             _userManager = userManager;
             _identityProvider = new IdentityProvider(userManager);

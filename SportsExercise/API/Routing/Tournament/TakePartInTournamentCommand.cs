@@ -10,11 +10,11 @@ namespace SportsExercise.API.Routing.Tournament;
 
 internal class TakePartInTournamentCommand : AuthenticatedRouteCommand
 {
-    private readonly TournamentManager _tournamentManager;
+    private readonly TournamentManager? _tournamentManager;
     private readonly IUserManager _userManager;
     private readonly string _payload; // JSON payload containing push-up data
 
-    public TakePartInTournamentCommand(TournamentManager tournamentManager, IUserManager userManager, User identity, string payload) : base(identity)
+    public TakePartInTournamentCommand(TournamentManager? tournamentManager, IUserManager userManager, User identity, string payload) : base(identity)
     {
         _tournamentManager = tournamentManager;
         _payload = payload;

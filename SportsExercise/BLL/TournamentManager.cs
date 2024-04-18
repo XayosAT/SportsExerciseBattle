@@ -8,13 +8,13 @@ namespace SportsExercise.BLL;
 
 public class TournamentManager
 {
-    private static TournamentManager _instance;
+    private static TournamentManager? _instance;
     private static readonly object _lock = new object();
     private Dictionary<string, int> _userPushUps;
     private Timer _timer;
     public bool IsTournamentActive { get; private set; }
     private DateTime _startTime;
-    private IUserManager _userManager;
+    private readonly IUserManager _userManager;
     private string _log = "";
     
     
@@ -22,13 +22,13 @@ public class TournamentManager
     {
         _userManager = userManager;
         _userPushUps = new Dictionary<string, int>();
-        _timer = new Timer(20000); // 10 seconds
+        _timer = new Timer(20000); // 20 seconds can be changed to 120000 for 2 minutes
         _timer.Elapsed += EndTournament;
         IsTournamentActive = false;
         _timer.AutoReset = false;
     }
     
-    public static TournamentManager GetInstance(IUserManager userManager)
+    public static TournamentManager? GetInstance(IUserManager userManager)
     {
         if (_instance == null)
         {

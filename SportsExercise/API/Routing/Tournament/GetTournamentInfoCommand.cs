@@ -10,9 +10,9 @@ namespace SportsExercise.API.Routing.Tournament;
 
 internal class GetTournamentInfoCommand : AuthenticatedRouteCommand
 {
-    private readonly TournamentManager _tournamentManager;
+    private readonly TournamentManager? _tournamentManager;
     
-    public GetTournamentInfoCommand(TournamentManager tournamentManager, User identity) : base(identity)
+    public GetTournamentInfoCommand(TournamentManager? tournamentManager, User identity) : base(identity)
     {
         Console.WriteLine("GetTournamentInfoCommand Constructor");
         _tournamentManager = tournamentManager;
