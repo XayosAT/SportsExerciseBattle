@@ -3,7 +3,7 @@
 namespace SportsExercise.BLL
 {
     [Serializable]
-    internal class DuplicateUserException : Exception
+    public class DuplicateUserException : Exception
     {
         public DuplicateUserException()
         {

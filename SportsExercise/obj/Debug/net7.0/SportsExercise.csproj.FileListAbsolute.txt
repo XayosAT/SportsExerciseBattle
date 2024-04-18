@@ -19,3 +19,5 @@ C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\obj\Debug\n
 C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\obj\Debug\net7.0\SportsExercise.pdb
 C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\obj\Debug\net7.0\SportsExercise.genruntimeconfig.cache
 C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\obj\Debug\net7.0\ref\SportsExercise.dll
+C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\bin\Debug\net7.0\nunit.framework.dll
+C:\Users\Christoph\RiderProjects\SportsExerciseBattle\SportsExercise\bin\Debug\net7.0\nunit.framework.legacy.dll

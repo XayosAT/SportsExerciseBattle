@@ -7,7 +7,7 @@ using SportsExercise.Models;
 
 namespace SportsExercise.DAL
 {
-    internal interface IUserDao
+    public interface IUserDao
     {
         User? GetUserByAuthToken(string authToken);
         User? GetUserByCredentials(string username, string password);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SportsExercise.BLL
 {
-    internal class UserManager : IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IUserDao _userDao;
 

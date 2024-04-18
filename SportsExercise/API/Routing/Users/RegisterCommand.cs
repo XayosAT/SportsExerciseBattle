@@ -27,9 +27,7 @@ namespace SportsExercise.API.Routing.Users
 
             try
             {
-                Console.WriteLine("RegisterCommand +++++++++++");
                 _userManager.RegisterUser(_credentials);
-                Console.WriteLine("RegisterCommand +++++++++++");
                 response = new HttpResponse(StatusCode.Created, "User successfully created");
                 
             }

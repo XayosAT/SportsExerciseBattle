@@ -12,7 +12,7 @@ public class TournamentManager
     private static readonly object _lock = new object();
     private Dictionary<string, int> _userPushUps;
     private Timer _timer;
-    private bool _isTournamentActive;
+    public bool IsTournamentActive { get; private set; }
     private DateTime _startTime;
     private IUserManager _userManager;
     private string _log = "";
@@ -24,7 +24,7 @@ public class TournamentManager
         _userPushUps = new Dictionary<string, int>();
         _timer = new Timer(20000); // 10 seconds
         _timer.Elapsed += EndTournament;
-        _isTournamentActive = false;
+        IsTournamentActive = false;
         _timer.AutoReset = false;
     }
     
@@ -53,9 +53,9 @@ public class TournamentManager
         
         lock (_lock) 
         {
-            if (!_isTournamentActive)
+            if (!IsTournamentActive)
             {
-                _isTournamentActive = true;
+                IsTournamentActive = true;
                 _userPushUps.Clear();  // Optionally clear previous data
                 _timer.Start();  // Start the 2-minute countdown
                 _startTime = DateTime.Now;
@@ -79,7 +79,7 @@ public class TournamentManager
     {
         lock (_lock) 
         {
-            if (!_isTournamentActive)
+            if (!IsTournamentActive)
             {
                 if(_log != "")
                 {
@@ -141,7 +141,7 @@ public class TournamentManager
             }
             
             
-            _isTournamentActive = false;
+            IsTournamentActive = false;
             _timer.Stop();
         }
     }
@@ -157,5 +157,17 @@ public class TournamentManager
     private void UpdateElo(string username, int elo)
     {
         _userManager.UpdateElo(username, elo);
+    }
+    
+    public int GetPushUps(string username)
+    {
+        lock (_lock)
+        {
+            if (_userPushUps.ContainsKey(username))
+            {
+                return _userPushUps[username];
+            }
+            return -1;
+        }
     }
 }
